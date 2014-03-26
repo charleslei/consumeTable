@@ -1,0 +1,50 @@
+﻿.content{
+    margin: 0 auto;
+    width: 1000px;
+    margin-top: 100px;
+}
+.ctn{
+    width: 900px;
+    height: 500px;
+    background-color:#EDEDED;
+    border: 1px solid #999;
+}
+
+.richtextarea-content {
+    overflow: auto;
+    font-size: 12px;
+}
+
+.richtextarea-over {
+    opacity: 0.6;
+    filter: alpha(opacity=60);
+    zoom: 1
+}
+
+.richtextarea-table-ctn {
+    position: relative;
+    overflow: auto;
+    display:none;
+}
+
+.richtextarea-table-ctn-em {
+    position: absolute;
+    text-align: center;
+    font-weight: bold;
+    font-size: 30px;
+    font-style: normal;
+    color: #666;
+    display: none;
+    width: 100%;
+    height: 100%;
+    line-height: 100%;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+}
+
+.richtextarea-table {
+    margin-bottom: 0px;
+    width: 100%;
+    *width: 98%
+}
