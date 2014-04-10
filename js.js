@@ -1,5 +1,4 @@
 jQuery.fn.consumeTable = function(globalConfig) {
-
     function parseTable(cfg) {
         var me = this;
         var config = {
@@ -103,16 +102,15 @@ jQuery.fn.consumeTable = function(globalConfig) {
                 rows.push(cols);
             }
             rows = this._mergeSameCols(rows);
-            me._parseSuccess(rows);
+
+            me.config.success(rows);
+            me._genTable(rows);
         },
 
         _mergeSameCols : function(data) {
-            var firstR = data[0],
-                tempObj = {}, colUnique = [],
-                sameColCount = 1;
+            var firstR = data[0], tempObj = {}, colUnique = [], sameColCount = 1;
             //获取相同的列及其出现的次数
-            var i = 0,
-                len = firstR.length;
+            var i = 0, len = firstR.length;
             for (; i < len; i++) {
                 if (typeof tempObj[firstR[i]] == 'undefined') {
                     tempObj[firstR[i]] = [i];
@@ -123,8 +121,7 @@ jQuery.fn.consumeTable = function(globalConfig) {
             }
 
             //判断相同的列，数量是否相同
-            var hasSameCols = 1,
-                firstProp;
+            var hasSameCols = 1, firstProp;
             for (var item in tempObj) {
                 if (tempObj.hasOwnProperty(item)) {
                     firstProp = firstProp || item;
@@ -135,16 +132,12 @@ jQuery.fn.consumeTable = function(globalConfig) {
 
             //如果相同，进行列的拆分
             if (hasSameCols) {
-                var newData = [],
-                    i = 0,
-                    len = data.length,
-                    len1 = colUnique.length;
+                var newData = [], i = 0, len = data.length, len1 = colUnique.length;
                 for (; i < len; i++) {
                     var k = 0;
                     for (; k < sameColCount; k++) {
                         if (i == 0 && k < sameColCount - 1) continue;
-                        var row = [],
-                            j = 0;
+                        var row = [], j = 0;
                         for (; j < len1; j++) {
                             row.push(data[i][tempObj[colUnique[j]][k]]);
                         }
@@ -162,10 +155,7 @@ jQuery.fn.consumeTable = function(globalConfig) {
             var tds = $('.richtextarea-content tr');
             if (count < 2) return;
             $('td', tds[0]).each(function(tdindex, tditem) {
-                var i = count - 1,
-                    parent = $($(tditem).parent('tr')[0]),
-                    finalText = '',
-                    firstRow = true;
+                var i = count - 1, parent = $($(tditem).parent('tr')[0]), finalText = '', firstRow = true;
                 while (i--) {
                     var currentText = $(parent.children('td')[tdindex]).text(),
                         nextText = $(parent.next().children('td')[tdindex]).text();
@@ -227,7 +217,7 @@ jQuery.fn.consumeTable = function(globalConfig) {
             me.config.error(msg);
         },
 
-        _parseSuccess: function(rows) {
+        _genTable: function(rows) {
             var me = this;
             var h = this._container.find('.richtextarea-table-ctn table thead').empty();
             var b = this._container.find('.richtextarea-table-ctn table tbody').empty();
@@ -243,30 +233,6 @@ jQuery.fn.consumeTable = function(globalConfig) {
                     b.append(str);
                 }
             }
-
-            me.config.success(rows);
-        },
-
-        HtmlEncode : function(text) {
-            text = new String(text);
-
-            text = text.replace(/&/g, "&amp;");
-            text = text.replace(/"/g, "&quot;");
-            text = text.replace(/</g, "&lt;");
-            text = text.replace(/>/g, "&gt;");
-            text = text.replace(/\'/g, '&#39;'); // 39 27
-            return text;
-        },
-
-        HtmlDecode : function(text) {
-            text = new String(text);
-
-            text = text.replace(/&quot;/g, '"');
-            text = text.replace(/&amp;/g, '&');
-            text = text.replace(/&#39;/g, "'");
-            text = text.replace(/&lt;/g, '<');
-            text = text.replace(/&gt;/g, '>');
-            return text;
         }
     }
 
@@ -277,16 +243,4 @@ jQuery.fn.consumeTable = function(globalConfig) {
         $.extend(globalConfig, {self: me});
         me.data(sign, new parseTable(globalConfig));
     })
-
 }
-
-!function(){
-  var consumeTable = $("#data_area").consumeTable({
-    error: function(e){
-        //alert('e');
-    },
-    success: function(e){
-        //alert(e);
-    }
- });
-}();
